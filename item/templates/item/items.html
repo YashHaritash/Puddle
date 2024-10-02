@@ -1,0 +1,57 @@
+{% extends "core/base.html" %}
+
+{%block title%}Items{%endblock%}
+
+{%block content%}
+    <div class='p-6 grid grid-cols-4 gap4 bg-gray-200'>
+        <div class='col-span-1 m-2 bg-gray-100 p-2 rounded-xl'>
+            <form method='get' action="{%url 'item:items' %}">
+                {% comment %} No csrf_token required for get request {% endcomment %}
+                <input name="query" class="w-full py-4 px-6 botder rounded-xl" type="text" value="{{query}}" placeholder="Find Bike, a chair or a car">
+                <button class="mt-2 py-4 px-8 text-lg bg-teal-500 text-white rounded-xl hover:bg-teal-700">Search</button>
+            </form>
+
+            <hr class='my-6'>
+
+            <p class='font-semibold'>Categories</p>
+
+            
+            <ul>
+                {%for category in categories%}
+                    <li class = "px-2 py-2 rounded-xl {% if category.id == category_id%} bg-gray-200 {%endif%}"  >
+                        <a href="{% url 'item:items' %}?query={{query}}&category={{category.id}}" >{{category.name}}</a>
+                    </li>
+                {%endfor%}
+            </ul>   
+
+            <hr class='my-6'>
+
+            <p class='font-semibold'>Clear filtes</p>
+
+            <ul>
+                <li><a href="{%url 'item:items' %}" class='mt-2 py-4 px-8 inline-block bg-yellow-500 text-lg bg-yellow-500 rounded-xl text-white hover:bg-yellow-700'>Clear</a></li>
+            <ul>
+
+        </div>
+
+        <div class='col-span-3 m-2 '>
+            <div class='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6'>
+                {% for item in items %}
+                    <div class="bg-white rounded-xl overflow-hidden shadow-lg">
+                        <a href='/items/{{item.id}}'>
+                            <div>
+                                <!-- Make the image responsive and cover the entire area -->
+                                <img src='{{item.image.url}}' class='w-full h-48 object-cover'>
+                            </div>
+            
+                            <div class='p-6 bg-white'>
+                                <h2 class='text-2xl font-bold'>{{item.name}}</h2>
+                                <p class='text-gray-500'>Price : {{item.price}}</p>
+                            </div>
+                        </a>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+{%endblock%}
